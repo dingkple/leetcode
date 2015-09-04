@@ -23,32 +23,42 @@ class Solution(object):
                 return find_mid(nums2)
 
             nums1_mid = nums1[(l1 - 1) / 2]
-            print l1, 'l1 mid', nums1_mid
+            # print l1, 'l1 mid', nums1_mid
 
-            index_of_2 = self.find_in_array(nums2, nums1_mid)
+            index_of_2 = find_in_array(nums2, nums1_mid)
 
             if l1 == 1:
                 print l1, l2
                 print nums1,
                 print nums2
-                temp = (l2 - 1) / 2
+                # temp = (l2 - 1) / 2
+                # if l2 % 2 == 0:
+                #     if nums1[0] <= nums2[temp]:
+                #         return nums2[temp]
+                #     elif nums1[0] <= nums2[temp + 1]:
+                #         return nums1[0]
+                #     else:
+                #         return nums2[temp + 1]
+                # else:
+                #     print 'final 1', nums1, nums2
+                #     if l2 == 1:
+                #         return 1.*(nums1[0] + nums2[0]) / 2
+                #     else:
+                #         num2_mid = nums2[l2/2]
+                #         if nums1[0] < num2_mid:
+                #             return 1.*(max([num2_mid-1, nums1[0]]) + num2_mid) / 2
+                #         else:
+                #             return 1.*(min([num2_mid+1, nums1[0]]) + num2_mid) / 2
+
+                insert_index = find_in_array(nums2, nums1[0])
                 if l2 % 2 == 0:
-                    if nums1[0] <= nums2[temp]:
-                        return nums2[temp]
-                    elif nums1[0] <= nums2[temp + 1]:
-                        return nums1[0]
-                    else:
-                        return nums2[temp + 1]
+                    return translate(nums1, nums2, insert_index, l2, l2/2)
                 else:
-                    print 'final 1', nums1, nums2
-                    if l2 == 1:
-                        return 1.*(nums1[0] + nums2[0]) / 2
-                    else:
-                        num2_mid = nums2[l2/2]
-                        if nums1[0] < num2_mid:
-                            return 1.*(max([num2_mid-1, nums1[0]]) + num2_mid) / 2
-                        else:
-                            return 1.*(min([num2_mid+1, nums1[0]]) + num2_mid) / 2
+                    left_index = l2/2
+                    right_index = l2/2+1
+                    left = translate(nums1, nums2, insert_index, l2, left_index)
+                    right = translate(nums1, nums2, insert_index, l2, right_index)
+                    return (left + right) * 1.0 / 2
 
             if l1 == 2:
                 print nums1, nums2
@@ -57,8 +67,8 @@ class Solution(object):
                     b = min([nums1[1], nums2[1]])
                     return 1. * (a + b) / 2
                 elif l2 % 2 == 0:
-                    i1 = self.find_in_array(nums2, nums1[0])
-                    i2 = self.find_in_array(nums2, nums1[1])
+                    i1 = find_in_array(nums2, nums1[0])
+                    i2 = find_in_array(nums2, nums1[1])
 
                     print 'i1', i1, 'i2', i2
 
@@ -70,8 +80,8 @@ class Solution(object):
                     return 1.0 * (left_mid + right_mid) / 2
 
                 else:
-                    i1 = self.find_in_array(nums2, nums1[0])
-                    i2 = self.find_in_array(nums2, nums1[1])
+                    i1 = find_in_array(nums2, nums1[0])
+                    i2 = find_in_array(nums2, nums1[1])
 
                     print 'i1', i1, 'i2', i2
 
@@ -93,21 +103,6 @@ class Solution(object):
                 nums2 = nums2[:l2 - t]
 
             elif index_of_2 == l2 / 2:
-                # if nums2[index_of_2] > nums1_mid:
-                #     t = l1/2
-                #     print t
-                #     nums1 = nums1[t : ]
-                #     nums2 = nums2[:l2 - t]
-                # else:
-                # t = l1/2 + 1
-                # print t
-                # nums1 = nums1[:t]
-                # nums2 = nums2[(l1-t):]
-                # t = l1/2
-                # print t
-                # nums1 = nums1[t : ]
-                # nums2 = nums2[:l2 - t]
-
                 if l1 % 2 == 0:
                     t = l1 / 2 - 1
                     print 't ', t
@@ -125,29 +120,22 @@ class Solution(object):
                 nums1 = nums1[:l1-t]
                 nums2 = nums2[t:]
 
-    def check_length(self, length, l):
-        if l >= length/2  and l <= length/2+1:
-            print length, l, 'true'
-            return True
-        else:
-            print length, l, 'false'
-            return False
 
-    def find_in_array(self, array, target):
-        left = 0
-        right = len(array) - 1
+def find_in_array(array, target):
+    left = 0
+    right = len(array) - 1
 
-        while left <= right:
-            mid = (left + right) / 2
-            if array[mid] == target:
-                return mid
-            elif array[mid] < target:
-                left = mid + 1
-            elif array[mid] > target:
-                right = mid - 1
+    while left <= right:
+        mid = (left + right) / 2
+        if array[mid] == target:
+            return mid
+        elif array[mid] < target:
+            left = mid + 1
+        elif array[mid] > target:
+            right = mid - 1
 
-        print target, left
-        return left
+    print target, left
+    return left
 
 def real_mid(num1, num2):
     c = []
@@ -187,7 +175,7 @@ def translate(num1, num2, a, b, target):
 s = Solution()
 
 a = [1, 2, 4, 45, 64, 57, 56, 865, 785]
-a = [1, 2, 4, 45, 64, 57, 56, 865]
+# a = [1, 2, 4, 45, 64, 57, 56, 865]
 # a = [1, 6]
 a.sort()
 
@@ -200,7 +188,7 @@ fa = s.findMedianSortedArrays(a, b)
 print 'answer ', fa
 
 print sorted(a)
-print s.find_in_array(a, 63)
+print find_in_array(a, 63)
 
 c = []
 c.extend(a)
@@ -213,5 +201,5 @@ print find_mid(sorted(c))
 
 d = [4, 45, 56]
 print d
-print s.find_in_array(d, 11)
-print s.find_in_array(d, 5)
+print find_in_array(d, 11)
+print find_in_array(d, 5)
